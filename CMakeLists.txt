@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31) #指定最低的cmake版本
+cmake_minimum_required(VERSION 3.22.1) #指定最低的cmake版本
 
 # 指定编译器
 set(CMAKE_C_COMPILER "/usr/bin/gcc" CACHE FILEPATH "c compiler" FORCE)
@@ -26,6 +26,12 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE debug CACHE STRING "Choose the type of build." FORCE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release RelWithDeInfo MinSizeRel)
-message(STATUS "Build Type: ")
+message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+
+cmake_host_system_information(RESULT CPU_NUMS QUERY NUMBER_OF_LOGICAL_CORES)
+message(STATUS "CPU NUMS on current server is : ${CPU_NUMS}")
+math(EXPR JOBS "${CPU_NUMS} + ${CPU_NUMS} / 2")
+set(CMAKE_BUILD_PARALLEL_LEVEL ${JOBS} CACHE STRING "并行编译线程数")
+message(STATUS "Compiler default work jobs: ${CMAKE_BUILD_PARALLEL_LEVEL}")
 
 
